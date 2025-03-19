@@ -24,25 +24,53 @@ function buildNote(text) {
     const noteBody = document.createElement("div");
     noteBody.className = "note__body";
     noteBody.textContent = text;
+    noteBody.contentEditable = false;
 
     const noteFooter = document.createElement("div");
     noteFooter.className = "note__footer";
     noteFooter.style.justifyContent = "flex-end";
 
+    const editBtn = document.createElement("button");
+    editBtn.className = "note__edit";
+    editBtn.textContent = "Edit";
+    editBtn.onclick = () => toggleEditMode(note, noteBody, editBtn, text);
+
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "note__delete";
     deleteBtn.textContent = "Remove";
-    deleteBtn.onclick = () => deleteNote(note, text); // Добавляем обработчик
+    deleteBtn.onclick = () => deleteNote(note, text);
 
     const copyBtn = document.createElement("button");
     copyBtn.className = "note__copy";
     copyBtn.textContent = "Copy";
-    copyBtn.onclick = () => copyNote(text); // Добавляем обработчик
+    copyBtn.onclick = () => copyNote(text);
 
-    noteFooter.append(copyBtn, deleteBtn);
+    noteFooter.append(editBtn, copyBtn, deleteBtn);
     note.append(noteBody, noteFooter);
 
     return note;
+}
+
+function toggleEditMode(note, noteBody, editBtn, oldText) {
+    if (editBtn.textContent === "Edit") {
+        noteBody.contentEditable = true;
+        noteBody.focus();
+        note.classList.add("editing");
+        editBtn.textContent = "Save";
+    } else {
+        const newText = noteBody.textContent.trim();
+        if (!newText) return;
+
+        const index = notesList.indexOf(oldText);
+        if (index > -1) {
+            notesList[index] = newText;
+            localStorage.setItem("notes", JSON.stringify(notesList));
+        }
+
+        noteBody.contentEditable = false;
+        note.classList.remove("editing");
+        editBtn.textContent = "Edit";
+    }
 }
 
 function deleteNote(noteElement, noteText) {

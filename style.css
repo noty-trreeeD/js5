@@ -61,6 +61,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   word-wrap: break-word;
+  transition: border-color 0.2s ease-in-out;
 }
 
 .note__footer {
@@ -152,5 +153,25 @@ body {
 .note__copy:hover {
   background: #fff;
   border: 1.5px solid #fff;
+  color: #1976d2;
+}
+
+.note.editing {
+  border-color: #ffeb3b;
+}
+
+.note__edit {
+  background: transparent;
+  border: 1.5px solid #fff;
+  border-radius: 10px;
+  color: #fff;
+  padding: 4px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.note__edit:hover {
+  background: #fff;
   color: #1976d2;
 }
